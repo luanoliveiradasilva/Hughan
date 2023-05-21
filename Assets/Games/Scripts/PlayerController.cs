@@ -26,6 +26,7 @@ namespace Assets.Unity___Foundations_of_Audio.Scripts.System
         public float BottomClamp = -90.0f;
 
         private int _animationPlayerHash = Animator.StringToHash("Input");
+        private int _animationPlayerJumpHash = Animator.StringToHash("Jump");
 
         private CharacterController characterController;
         private Animator animator;
@@ -66,9 +67,7 @@ namespace Assets.Unity___Foundations_of_Audio.Scripts.System
         {
             float moveHorizontal = Input.GetAxis("Horizontal");
             float moveVertical = Input.GetAxis("Vertical");
-
-            Debug.Log("Horizontal" + moveHorizontal);
-            Debug.Log("Vertical" + moveVertical);
+            float jumpPlayer = Input.GetAxis("X");
 
             playerCharacterMove = new Vector3(moveHorizontal, 0.0f, moveVertical);
 
@@ -79,6 +78,15 @@ namespace Assets.Unity___Foundations_of_Audio.Scripts.System
                     float moveSpeedMultiplier = moveHorizontal > 0.0f || moveVertical > 0.0f ? 1.0f : 3.0f;
                     animator.SetFloat(_animationPlayerHash, playerCharacterMove.sqrMagnitude + moveSpeedMultiplier);
                     _rigidbody.velocity = transform.forward * moveSpeedPlayer * moveSpeedMultiplier;
+
+                    if(jumpPlayer > 0)
+                    {
+                        animator.SetBool(_animationPlayerJumpHash, true);
+                    }
+                    else
+                    {
+                        animator.SetBool(_animationPlayerJumpHash, false);
+                    }
                 }
                 else if (moveHorizontal < 0.0f || moveVertical < 0.0f)
                 {
