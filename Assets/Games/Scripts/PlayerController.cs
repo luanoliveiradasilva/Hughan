@@ -79,7 +79,7 @@ namespace Assets.Unity___Foundations_of_Audio.Scripts.System
                     animator.SetFloat(_animationPlayerHash, playerCharacterMove.sqrMagnitude + moveSpeedMultiplier);
                     _rigidbody.velocity = transform.forward * moveSpeedPlayer * moveSpeedMultiplier;
 
-                    if(jumpPlayer > 0)
+                    if (jumpPlayer > 0)
                     {
                         animator.SetBool(_animationPlayerJumpHash, true);
                     }

@@ -8,8 +8,10 @@ namespace Assets.MainMenu.Scripts
     public class LoadGame : MonoBehaviour
     {
 
-        [SerializeField] private string SceneName;   
         
+        [SerializeField] private string SceneName;
+
+        [Header("Loading Scene")]
         [SerializeField] GameObject loadingScreen;
         [SerializeField] GameObject closeCurrentScreen;
         [SerializeField] GameObject OpenNextScreen;
