@@ -68,6 +68,7 @@ namespace Assets.Unity___Foundations_of_Audio.Scripts.System
             float moveHorizontal = Input.GetAxis("Horizontal");
             float moveVertical = Input.GetAxis("Vertical");
             float jumpPlayer = Input.GetAxis("X");
+            bool jumpPlayerkb = Input.GetKey(KeyCode.Space);
 
             playerCharacterMove = new Vector3(moveHorizontal, 0.0f, moveVertical);
 
@@ -79,7 +80,7 @@ namespace Assets.Unity___Foundations_of_Audio.Scripts.System
                     animator.SetFloat(_animationPlayerHash, playerCharacterMove.sqrMagnitude + moveSpeedMultiplier);
                     _rigidbody.velocity = transform.forward * moveSpeedPlayer * moveSpeedMultiplier;
 
-                    if (jumpPlayer > 0)
+                    if (jumpPlayer > 0 || jumpPlayerkb == true)
                     {
                         animator.SetBool(_animationPlayerJumpHash, true);
                     }
