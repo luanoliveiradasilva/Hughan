@@ -7,27 +7,38 @@ namespace Assets.MainMenu.Scripts
 {
     public class LoadGame : MonoBehaviour
     {
+
+        [SerializeField] private string SceneName;   
         
-        [SerializeField] private string SceneName;
+        [SerializeField] GameObject loadingScreen;
+        [SerializeField] GameObject closeCurrentScreen;
+        [SerializeField] GameObject OpenNextScreen;
+
         [SerializeField] private TMP_Text loadingText;
+
+        [SerializeField] Button startButton;
+        [SerializeField] Button settingsButton;
+        [SerializeField] Button quitButton;
+        
+
         private float loadingTime = 5f;
-        public Button startButton;
-        public GameObject loadingScreen;
         private int numDots = 0;
 
         private void Start()
         {
-            startButton.onClick.AddListener(loadScene);
+            startButton.onClick.AddListener(loadScene);            
+            settingsButton.onClick.AddListener(SettingsOfGame);
+            quitButton.onClick.AddListener(SettingsOfGame);
             loadingScreen.SetActive(false);
         }
 
-        public void loadScene(){
-
-            startButton.gameObject.SetActive(false);
+        public void loadScene()
+        {
+            closeCurrentScreen.gameObject.SetActive(false);
             loadingScreen.SetActive(true);
             InvokeRepeating("updateLoadingText", 0f, 0.5f); // Chama o método updateLoadingText a cada 0.5 segundos
             Invoke("loadSceneGame", loadingTime);
-        }        
+        }
 
         //Carregar a cena em segundo plano de forma assincrona permitindo com que a tela seja completamente carregada.
         private void loadSceneGame()
@@ -43,5 +54,19 @@ namespace Assets.MainMenu.Scripts
             loadingText.text = "Loading" + new string('.', numDots);
         }
 
+        public void SettingsOfGame()
+        {
+            closeCurrentScreen.gameObject.SetActive(false);
+            OpenNextScreen.SetActive(true);
+        }
+
+        public void QuitTheGame()
+        {
+            #if UNITY_EDITOR
+                    UnityEditor.EditorApplication.isPlaying = false;
+            #else
+                    Application.Quit();
+            #endif
+        }
     }
 }
