@@ -38,8 +38,11 @@ namespace Assets.Unity___Foundations_of_Audio.Scripts.System
         private float _targetRotation = 0.0f;
         private float _rotationVelocity;
         private float _verticalVelocity;
-        private float _threshold = 0.01f;
-        private float _cinemachineTargetPitch;
+        private float _cinemachineTargetY;
+        private float _cinemachineTargetX;
+        public float CameraAngleOverride = 0.0f;
+        public bool LockCameraPosition = false;
+
 
         private void Awake()
         {
@@ -60,39 +63,37 @@ namespace Assets.Unity___Foundations_of_Audio.Scripts.System
         private void Update()
         {
             MovePlayer();
-            MoveCameraRotation();
+
         }
 
+        private void LateUpdate()
+        {
+            MoveCameraRotation();
+        }
         private void MovePlayer()
         {
-            float moveHorizontal = Input.GetAxis("Horizontal");
             float moveVertical = Input.GetAxis("Vertical");
+            float moveHorizontal = Input.GetAxis("Horizontal");
             float jumpPlayer = Input.GetAxis("X");
             bool jumpPlayerkb = Input.GetKey(KeyCode.Space);
 
-            playerCharacterMove = new Vector3(moveHorizontal, 0.0f, moveVertical);
+            playerCharacterMove = new Vector3(moveHorizontal, moveVertical);
 
-            if (playerCharacterMove != Vector3.zero)
+            if (playerCharacterMove.sqrMagnitude >= 0.01f)
             {
-                if (moveHorizontal != 0.0f || moveVertical != 0.0f)
-                {
-                    float moveSpeedMultiplier = moveHorizontal > 0.0f || moveVertical > 0.0f ? 1.0f : 3.0f;
-                    animator.SetFloat(_animationPlayerHash, playerCharacterMove.sqrMagnitude + moveSpeedMultiplier);
-                    _rigidbody.velocity = transform.forward * moveSpeedPlayer * moveSpeedMultiplier;
 
-                    if (jumpPlayer > 0 || jumpPlayerkb == true)
-                    {
-                        animator.SetBool(_animationPlayerJumpHash, true);
-                    }
-                    else
-                    {
-                        animator.SetBool(_animationPlayerJumpHash, false);
-                    }
-                }
-                else if (moveHorizontal < 0.0f || moveVertical < 0.0f)
+                float moveSpeedMultiplier = (Mathf.Abs(moveVertical) > 0.0f) ? 1.0f : 3.0f;
+
+                animator.SetFloat(_animationPlayerHash, playerCharacterMove.sqrMagnitude + moveSpeedMultiplier);
+                _rigidbody.velocity = transform.forward * moveSpeedPlayer * moveSpeedMultiplier;
+
+                if (jumpPlayer > 0 || jumpPlayerkb == true)
                 {
-                    animator.SetFloat(_animationPlayerHash, playerCharacterMove.sqrMagnitude + 3);
-                    _rigidbody.velocity = -transform.forward * moveSpeedPlayer;
+                    animator.SetBool(_animationPlayerJumpHash, true);
+                }
+                else
+                {
+                    animator.SetBool(_animationPlayerJumpHash, false);
                 }
 
                 //Input  directions of character with base in rotation and used calculate of Euler
@@ -116,29 +117,25 @@ namespace Assets.Unity___Foundations_of_Audio.Scripts.System
         private void MoveCameraRotation()
         {
 
-            float moveRVertical = Input.GetAxis("Vertical");
-            float moveRHorizontal = Input.GetAxis("Horizontal");
+            float moveRVertical = Input.GetAxis("R_Vertical");
+            float moveRHorizontal = Input.GetAxis("R_Horizontal");
 
-            Debug.Log("Rotation" + moveCamera.magnitude);
+            moveCamera = new Vector3(moveRHorizontal, moveRVertical, 0.0f);
 
-            moveCamera = new Vector3(moveRHorizontal, 0.0f, moveRVertical);
-
-            if (moveCamera.magnitude >= _threshold)
+            if (moveCamera.sqrMagnitude >= 0.01f)
             {
-                float deltaTimeMultiplier = moveRHorizontal > 0.0f || moveRVertical > 0 ? 1.0f : Time.deltaTime;
-
-                _cinemachineTargetPitch += moveCamera.y * RotationSpeed * deltaTimeMultiplier;
-                _rotationVelocity = moveCamera.x * RotationSpeed * deltaTimeMultiplier;
-
-                // clamp our pitch rotation
-                _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
-
-                // Update Cinemachine camera target pitch
-                CinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
-
-                // rotate the player left and right
-                transform.Rotate(Vector3.up * _rotationVelocity);
+                float deltaTimeMultiplier = (Mathf.Abs(moveRHorizontal) > 0.0f || Mathf.Abs(moveRVertical) > 0.0f) ? 1.0f : Time.deltaTime;
+                _cinemachineTargetX += moveCamera.x * deltaTimeMultiplier;
+                _cinemachineTargetY += moveCamera.y * deltaTimeMultiplier;
             }
+
+            // clamp our rotations so our values are limited 360 degrees
+            _cinemachineTargetX = ClampAngle(_cinemachineTargetX, float.MinValue, float.MaxValue);
+            _cinemachineTargetY = ClampAngle(_cinemachineTargetY, BottomClamp, TopClamp);
+
+            // Cinemachine will follow this target
+            CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetY + CameraAngleOverride,
+                _cinemachineTargetX, 0.0f);
         }
 
         private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
