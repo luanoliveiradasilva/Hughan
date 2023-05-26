@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,6 +25,7 @@ namespace Assets.Games.Character.Scripts
 
         private bool deathPlayer = false;
 
+
         private void Start()
         {
             currentHealth = maxHealth;
@@ -45,7 +46,9 @@ namespace Assets.Games.Character.Scripts
 
             if (currentHealth == 0 && !deathPlayer)
             {
+
                 Die();
+
             }
         }
 
@@ -56,32 +59,38 @@ namespace Assets.Games.Character.Scripts
         }
 
         private void Die()
-        {
-            // Lança um raio abaixo do personagem para detectar o chão
-            Ray groundRay = new Ray(transform.position, Vector3.down);
-            RaycastHit hit;
-
-            int terrainLayerMask = LayerMask.GetMask("Terrain");
-            // Verifica se o raio colide com o chão
-            if (Physics.Raycast(groundRay, out hit, Mathf.Infinity, terrainLayerMask))
-            {
-                // Ajuste de altura para a posição de queda
-                float heightOffset = 0.1f;
-
-                // Move o personagem para a posição de queda, considerando a altura do chão
-                Vector3 fallPosition = hit.point - new Vector3(0f, heightOffset, 0f);
-                transform.position = fallPosition;
-
-                animator.SetBool(_animationPlayerDeath, true);
-            }           
+        {     
             
+            animator.SetBool(_animationPlayerDeath, true);
+            StartCoroutine(IncreaseCenterYOverTime(3.8f));       
+        }
+
+        private IEnumerator IncreaseCenterYOverTime(float duration)
+        {
+
+            Vector3 initialCenter = characterController.center;
+            Vector3 targetCenter = initialCenter;
+            targetCenter.y += 0.8f; // Ajuste o valor conforme necessário
+
+            float elapsedTime = 0f;
+
+            while (elapsedTime < duration)
+            {
+                elapsedTime += Time.deltaTime;
+                float time = Mathf.Clamp01(elapsedTime / duration);
+                characterController.center = Vector3.Lerp(initialCenter, targetCenter, time);
+                yield return null;
+            }
+
+            // Garanta que o valor final seja exatamente o desejado
+            characterController.center = targetCenter;
         }
 
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Enemy"))
             {
-                int damage = 20;
+                int damage = 50;
                 TakeDamage(damage);
             }
         }

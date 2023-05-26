@@ -26,6 +26,7 @@ namespace Assets.Unity___Foundations_of_Audio.Scripts.System
 
         private int _animationPlayerHash = Animator.StringToHash("Input");
         private int _animationPlayerJumpHash = Animator.StringToHash("Jump");
+        private int _animationPlayerAttackHas = Animator.StringToHash("Attack");
 
         private CharacterController characterController;
         private Animator animator;
@@ -39,6 +40,7 @@ namespace Assets.Unity___Foundations_of_Audio.Scripts.System
         private float _verticalVelocity;
         private float _cinemachineTargetY;
         private float _cinemachineTargetX;
+
         public float CameraAngleOverride = 0.0f;
         public bool LockCameraPosition = false;
 
@@ -73,7 +75,9 @@ namespace Assets.Unity___Foundations_of_Audio.Scripts.System
             float moveVertical = Input.GetAxis("Vertical");
             float moveHorizontal = Input.GetAxis("Horizontal");
             float jumpPlayer = Input.GetAxis("X");
+            float attackControl = Input.GetAxis("O");
             bool jumpPlayerkb = Input.GetKey(KeyCode.Space);
+            bool attack = Input.GetKey(KeyCode.Q);
 
             playerCharacterMove = new Vector3(moveHorizontal, moveVertical);
 
@@ -94,7 +98,9 @@ namespace Assets.Unity___Foundations_of_Audio.Scripts.System
                     animator.SetBool(_animationPlayerJumpHash, false);
                 }
 
-                //Input  directions of character with base in rotation and used calculate of Euler
+                Attack(attack, attackControl);         
+                
+               //Input  directions of character with base in rotation and used calculate of Euler
                 Vector3 inputDirection = new Vector3(playerCharacterMove.x, 0.0f, playerCharacterMove.y).normalized;
 
                 _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + _mainCamera.transform.eulerAngles.y;
@@ -109,9 +115,9 @@ namespace Assets.Unity___Foundations_of_Audio.Scripts.System
             else
             {
                 animator.SetFloat(_animationPlayerHash, 0);
+                Attack(attack, attackControl);
             }
         }
-
         private void MoveCameraRotation()
         {
 
@@ -141,6 +147,19 @@ namespace Assets.Unity___Foundations_of_Audio.Scripts.System
             if (lfAngle < -360f) lfAngle += 360f;
             if (lfAngle > 360f) lfAngle -= 360f;
             return Mathf.Clamp(lfAngle, lfMin, lfMax);
+        }
+
+        private void Attack(bool attack, float attackControll)
+        {
+            
+            if (attack == true || attackControll > 0)
+            {
+                Debug.Log("Debug" + attackControll);
+                animator.SetBool(_animationPlayerAttackHas, true);
+            }else
+            {
+                animator.SetBool(_animationPlayerAttackHas, false);
+            }
         }
 
     }
