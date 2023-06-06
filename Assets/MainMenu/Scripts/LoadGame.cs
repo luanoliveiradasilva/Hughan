@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
@@ -6,9 +7,7 @@ using TMPro;
 namespace Assets.MainMenu.Scripts
 {
     public class LoadGame : MonoBehaviour
-    {
-
-        
+    {        
         [SerializeField] private string SceneName;
 
         [Header("Loading Scene")]
@@ -20,8 +19,7 @@ namespace Assets.MainMenu.Scripts
 
         [SerializeField] Button startButton;
         [SerializeField] Button settingsButton;
-        [SerializeField] Button quitButton;
-        
+        [SerializeField] Button quitButton;        
 
         private float loadingTime = 5f;
         private int numDots = 0;
