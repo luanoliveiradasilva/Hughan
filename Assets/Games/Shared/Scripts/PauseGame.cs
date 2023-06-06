@@ -13,7 +13,7 @@ public class PauseGame : MonoBehaviour
 
         if (Input.GetKey(KeyCode.F))
         {
-            if (GameIsPaused)
+            if (GameIsPaused == true)
             {
                 Resume();
             }

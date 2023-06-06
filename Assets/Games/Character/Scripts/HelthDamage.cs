@@ -70,7 +70,7 @@ namespace Assets.Games.Character.Scripts
 
             Vector3 initialCenter = characterController.center;
             Vector3 targetCenter = initialCenter;
-            targetCenter.y += 0.8f; // Ajuste o valor conforme necessário
+            targetCenter.y += 1.1f; // Ajuste o valor conforme necessário
 
             float elapsedTime = 0f;
 

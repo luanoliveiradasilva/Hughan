@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 namespace Assets.Unity___Foundations_of_Audio.Scripts.System
 {
@@ -34,6 +35,7 @@ namespace Assets.Unity___Foundations_of_Audio.Scripts.System
         private Vector3 moveCamera;
         private GameObject _mainCamera;
         private Rigidbody _rigidbody;
+        private AnimatorClipInfo[] _CurrentClipInfo;
 
         private float _targetRotation = 0.0f;
         private float _rotationVelocity;
@@ -63,7 +65,6 @@ namespace Assets.Unity___Foundations_of_Audio.Scripts.System
         private void Update()
         {
             MovePlayer();
-
         }
 
         private void LateUpdate()
@@ -75,9 +76,9 @@ namespace Assets.Unity___Foundations_of_Audio.Scripts.System
             float moveVertical = Input.GetAxis("Vertical");
             float moveHorizontal = Input.GetAxis("Horizontal");
             float jumpPlayer = Input.GetAxis("X");
-            float attackControl = Input.GetAxis("O");
-            bool jumpPlayerkb = Input.GetKey(KeyCode.Space);
-            bool attack = Input.GetKey(KeyCode.Q);
+            float attackControl = Input.GetAxis("L1");
+            bool jumpKeyboard = Input.GetKey(KeyCode.E);
+            bool attackKeyboard = Input.GetKey(KeyCode.Q);
 
             playerCharacterMove = new Vector3(moveHorizontal, moveVertical);
 
@@ -89,18 +90,13 @@ namespace Assets.Unity___Foundations_of_Audio.Scripts.System
                 animator.SetFloat(_animationPlayerHash, playerCharacterMove.sqrMagnitude + moveSpeedMultiplier);
                 _rigidbody.velocity = transform.forward * moveSpeedPlayer * moveSpeedMultiplier;
 
-                if (jumpPlayer > 0 || jumpPlayerkb == true)
-                {
-                    animator.SetBool(_animationPlayerJumpHash, true);
-                }
-                else
-                {
-                    animator.SetBool(_animationPlayerJumpHash, false);
-                }
+                if (jumpPlayer > 0 || jumpKeyboard == true)
+                    StartCoroutine(Jump());
 
-                Attack(attack, attackControl);         
-                
-               //Input  directions of character with base in rotation and used calculate of Euler
+                if (attackControl > 0 || attackKeyboard == true)
+                    StartCoroutine(Attacks());
+
+                //Input  directions of character with base in rotation and used calculate of Euler
                 Vector3 inputDirection = new Vector3(playerCharacterMove.x, 0.0f, playerCharacterMove.y).normalized;
 
                 _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + _mainCamera.transform.eulerAngles.y;
@@ -115,7 +111,12 @@ namespace Assets.Unity___Foundations_of_Audio.Scripts.System
             else
             {
                 animator.SetFloat(_animationPlayerHash, 0);
-                Attack(attack, attackControl);
+
+                if (jumpPlayer > 0 || jumpKeyboard == true)
+                    StartCoroutine(Jump());
+
+                if (attackControl > 0 || attackKeyboard == true)
+                    StartCoroutine(Attacks());
             }
         }
         private void MoveCameraRotation()
@@ -149,17 +150,22 @@ namespace Assets.Unity___Foundations_of_Audio.Scripts.System
             return Mathf.Clamp(lfAngle, lfMin, lfMax);
         }
 
-        private void Attack(bool attack, float attackControll)
+        private IEnumerator Attacks()
         {
-            
-            if (attack == true || attackControll > 0)
-            {
-                Debug.Log("Debug" + attackControll);
-                animator.SetBool(_animationPlayerAttackHas, true);
-            }else
-            {
-                animator.SetBool(_animationPlayerAttackHas, false);
-            }
+            _CurrentClipInfo = this.animator.GetCurrentAnimatorClipInfo(0);
+
+            animator.SetBool(_animationPlayerAttackHas, true);
+            yield return new WaitForSeconds(_CurrentClipInfo[0].clip.length);
+            animator.SetBool(_animationPlayerAttackHas, false);
+        }
+
+        private IEnumerator Jump()
+        {
+            _CurrentClipInfo = this.animator.GetCurrentAnimatorClipInfo(0);
+
+            animator.SetBool(_animationPlayerJumpHash, true);
+            yield return new WaitForSeconds(_CurrentClipInfo[0].clip.length);
+            animator.SetBool(_animationPlayerJumpHash, false);
         }
 
     }
