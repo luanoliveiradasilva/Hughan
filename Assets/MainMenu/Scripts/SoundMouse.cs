@@ -2,28 +2,34 @@
 
 namespace Assets.MainMenu.Scripts
 {
-    class SoundMouse: MonoBehaviour
+    class SoundMouse : MonoBehaviour
     {
 
         public AudioClip soundClip;
         private AudioSource audioSource;
 
-        public float cursorSpeed = 5f;
-
         private void Start()
         {
             // Adicione um componente AudioSource ao objeto que possui esse script
             audioSource = gameObject.AddComponent<AudioSource>();
-            audioSource.clip = soundClip;
+            audioSource.volume = 0.3f;
         }
 
         private void OnMouseEnter()
         {
-            
-            // Reproduza o som quando o mouse entrar no objeto
+            audioSource.clip = soundClip;
             audioSource.Play();
-            audioSource.volume = 0.3f;
-
         }
-    }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            Debug.Log("Entrou");
+            // Verificar se o trigger ocorreu com o objeto desejado (o botão)
+            if (collision.CompareTag("Cursor"))
+            {
+                audioSource.clip = soundClip;
+                audioSource.Play();
+            }
+        }
+    }      
 }
