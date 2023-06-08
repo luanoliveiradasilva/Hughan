@@ -22,12 +22,19 @@ namespace Assets.Shared.Scripts
 
         private void Start()
         {
-            loadingScreen.SetActive(false);
+            loadingScreen.SetActive(false);            
         }
-        public void loadScene()
+
+        private void Update()
         {
+            transform.position += Vector3.forward * 1 * Time.unscaledDeltaTime;
+        }
+
+        public void loadScene()
+        {            
             closeCurrentScreen.gameObject.SetActive(false);
             loadingScreen.SetActive(true);
+            Time.timeScale = 1f;
             InvokeRepeating("updateLoadingText", 0f, 0.5f); // Chama o método updateLoadingText a cada 0.5 segundos
             Invoke("loadSceneGame", loadingTime);
         }
@@ -44,6 +51,11 @@ namespace Assets.Shared.Scripts
             numDots++;
             if (numDots > 3) numDots = 1;
             loadingText.text = "Loading" + new string('.', numDots);
+        }
+
+        public void DesabilityTimeScale()
+        {
+            transform.position += Vector3.forward * 1 * Time.unscaledDeltaTime;
         }
     }
 }

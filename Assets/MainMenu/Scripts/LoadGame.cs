@@ -17,7 +17,7 @@ namespace Assets.MainMenu.Scripts
         [SerializeField] Button startButton;
         [SerializeField] Button settingsButton;
         [SerializeField] Button quitButton;
-        [SerializeField] Button _back;
+        
 
         private void Start()
         {

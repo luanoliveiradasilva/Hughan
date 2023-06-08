@@ -15,6 +15,7 @@ public class PauseGame : MonoBehaviour
     [Header("Buttons")]
     [SerializeField] Button quitButton;
 
+
     private void Start()
     {
         quitButton.onClick.AddListener(_loadGamesScenes.loadScene);
@@ -22,7 +23,6 @@ public class PauseGame : MonoBehaviour
 
     private void Update()
     {
-        
         float options = Input.GetAxis("Options");
 
         if (options > 0 || Input.GetKey(KeyCode.Space) == true)
@@ -41,15 +41,14 @@ public class PauseGame : MonoBehaviour
     private void Resume()
     {
         pauseMenuUI.SetActive(false);
-        //Time.timeScale = 1f;
-        GameIsPaused = false; 
-        
+        Time.timeScale = 1f;
+        GameIsPaused = false;        
     }
 
     private void Pause()
     {
         pauseMenuUI.SetActive(true);
-        //Time.timeScale = 0f;
+        Time.timeScale = 0f;
         GameIsPaused = true;
     }
 }
