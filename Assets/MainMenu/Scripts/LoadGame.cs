@@ -3,70 +3,36 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
+using Assets.Shared.Scripts;
 
 namespace Assets.MainMenu.Scripts
 {
     public class LoadGame : MonoBehaviour
-    {        
-        [SerializeField] private string SceneName;
+    {
 
-        [Header("Loading Scene")]
-        [SerializeField] GameObject loadingScreen;
-        [SerializeField] GameObject closeCurrentScreen;
-        [SerializeField] GameObject OpenNextScreen;
+        private static LoadGamesScenes _loadGamesScenes;
+        private static SettingGame _settingGame; 
 
-        [SerializeField] private TMP_Text loadingText;
-
+        [Header("Buttons")]
         [SerializeField] Button startButton;
         [SerializeField] Button settingsButton;
-        [SerializeField] Button quitButton;        
-
-        private float loadingTime = 5f;
-        private int numDots = 0;
+        [SerializeField] Button quitButton;
+        [SerializeField] Button _back;
 
         private void Start()
         {
-            startButton.onClick.AddListener(loadScene);            
-            settingsButton.onClick.AddListener(SettingsOfGame);
-            quitButton.onClick.AddListener(SettingsOfGame);
-            loadingScreen.SetActive(false);
-        }
-
-        public void loadScene()
-        {
-            closeCurrentScreen.gameObject.SetActive(false);
-            loadingScreen.SetActive(true);
-            InvokeRepeating("updateLoadingText", 0f, 0.5f); // Chama o método updateLoadingText a cada 0.5 segundos
-            Invoke("loadSceneGame", loadingTime);
-        }
-
-        //Carregar a cena em segundo plano de forma assincrona permitindo com que a tela seja completamente carregada.
-        private void loadSceneGame()
-        {
-            SceneManager.LoadSceneAsync(SceneName);
-        }
-
-        //Carrega os 3 pontos no texto do loading, para ter uma animacao com o usuário
-        private void updateLoadingText()
-        {
-            numDots++;
-            if (numDots > 3) numDots = 1;
-            loadingText.text = "Loading" + new string('.', numDots);
-        }
-
-        public void SettingsOfGame()
-        {
-            closeCurrentScreen.gameObject.SetActive(false);
-            OpenNextScreen.SetActive(true);
+            startButton.onClick.AddListener(_loadGamesScenes.loadScene);
+            settingsButton.onClick.AddListener(_settingGame.SettingsOfGame);
+            quitButton.onClick.AddListener(QuitTheGame);
         }
 
         public void QuitTheGame()
         {
-            #if UNITY_EDITOR
+        #if UNITY_EDITOR
                     UnityEditor.EditorApplication.isPlaying = false;
-            #else
-                    Application.Quit();
-            #endif
+        #else
+                            Application.Quit();
+        #endif
         }
     }
 }
