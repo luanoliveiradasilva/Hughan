@@ -25,12 +25,15 @@ namespace Assets.Games.Character.Scripts
 
         private bool deathPlayer = false;
 
+        private void Awake()
+        {
+            animator = GetComponent<Animator>();
+            characterController = GetComponent<CharacterController>();
+        }
 
         private void Start()
         {
             currentHealth = maxHealth;
-            animator = GetComponent<Animator>();
-            characterController = GetComponent<CharacterController>();
             respawnPosition = transform.position;
         }
 

@@ -1,18 +1,23 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using TMPro;
 using Assets.Shared.Scripts;
 
 public class PauseGame : MonoBehaviour
 {
-    public static bool GameIsPaused = false;
 
+    //verificar o pause do jogo
+    private static bool _gameIsPaused = false;
+    private bool _pauseButtonPressed = false;
+
+    //verificar a cena a ser carregada
     private static LoadGamesScenes _loadGamesScenes;
 
-    [SerializeField] GameObject pauseMenuUI;   
+    [Header("Painel de Pause")]
+    [Tooltip("Carrega o painel de pauso do jogo.")]
+    [SerializeField] GameObject pauseMenuUI;
 
     [Header("Buttons")]
+    [Tooltip("Carrega o botao de quit do jogo")]
     [SerializeField] Button quitButton;
 
 
@@ -23,32 +28,25 @@ public class PauseGame : MonoBehaviour
 
     private void Update()
     {
-        float options = Input.GetAxis("Options");
 
-        if (options > 0 || Input.GetKey(KeyCode.Space) == true)
+        if (Input.GetButtonDown("Options") || Input.GetKey(KeyCode.Escape))
         {
-            if (!GameIsPaused == true)
+            if (!_pauseButtonPressed)
             {
-                Pause();                
+                _pauseButtonPressed = true;
+                OnclickPause();
             }
-            else
-            {
-                Resume();
-            }
+        }
+        else
+        {
+            _pauseButtonPressed = false;
         }
     }
 
-    private void Resume()
+    private void OnclickPause()
     {
-        pauseMenuUI.SetActive(false);
-        Time.timeScale = 1f;
-        GameIsPaused = false;        
-    }
-
-    private void Pause()
-    {
-        pauseMenuUI.SetActive(true);
-        Time.timeScale = 0f;
-        GameIsPaused = true;
+        pauseMenuUI.SetActive(_gameIsPaused);
+        Time.timeScale = _gameIsPaused ? 0f : 1f;
+        _gameIsPaused = !_gameIsPaused;
     }
 }

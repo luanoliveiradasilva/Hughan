@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 using TMPro;
 
 namespace Assets.Shared.Scripts
@@ -19,11 +17,6 @@ namespace Assets.Shared.Scripts
 
         private float loadingTime = 5f;
         private int numDots = 0;
-
-        private void Start()
-        {
-            loadingScreen.SetActive(false);            
-        }
 
         private void Update()
         {

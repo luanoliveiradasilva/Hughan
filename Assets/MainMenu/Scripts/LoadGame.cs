@@ -1,8 +1,5 @@
 ﻿using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using TMPro;
 using Assets.Shared.Scripts;
 
 namespace Assets.MainMenu.Scripts
