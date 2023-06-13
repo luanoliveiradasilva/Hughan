@@ -45,10 +45,5 @@ namespace Assets.Shared.Scripts
             if (numDots > 3) numDots = 1;
             loadingText.text = "Loading" + new string('.', numDots);
         }
-
-        public void DesabilityTimeScale()
-        {
-            transform.position += Vector3.forward * 1 * Time.unscaledDeltaTime;
-        }
     }
 }

@@ -36,6 +36,7 @@ namespace Assets.Unity___Foundations_of_Audio.Scripts.System
         private GameObject _mainCamera;
         private Rigidbody _rigidbody;
         private AnimatorClipInfo[] _CurrentClipInfo;
+        [SerializeField] private GameObject helthBar;
 
         private float _targetRotation = 0.0f;
         private float _rotationVelocity;
@@ -58,6 +59,11 @@ namespace Assets.Unity___Foundations_of_Audio.Scripts.System
             _animator = GetComponent<Animator>();
             _rigidbody = GetComponent<Rigidbody>();
 
+        }
+
+        private void Start()
+        {
+            helthBar.SetActive(true);
         }
 
         private void Update()
