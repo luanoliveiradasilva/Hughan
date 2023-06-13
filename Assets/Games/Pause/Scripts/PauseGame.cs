@@ -1,6 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
-using Assets.Shared.Scripts;
 
 public class PauseGame : MonoBehaviour
 {
@@ -9,22 +7,9 @@ public class PauseGame : MonoBehaviour
     private static bool _gameIsPaused = false;
     private bool _pauseButtonPressed = false;
 
-    //verificar a cena a ser carregada
-    private static LoadGamesScenes _loadGamesScenes;
-
     [Header("Painel de Pause")]
     [Tooltip("Carrega o painel de pauso do jogo.")]
     [SerializeField] GameObject pauseMenuUI;
-
-    [Header("Buttons")]
-    [Tooltip("Carrega o botao de quit do jogo")]
-    [SerializeField] Button quitButton;
-
-
-    private void Start()
-    {
-        quitButton.onClick.AddListener(_loadGamesScenes.loadScene);
-    }
 
     private void Update()
     {

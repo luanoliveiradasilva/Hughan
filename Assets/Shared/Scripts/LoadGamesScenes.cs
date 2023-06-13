@@ -61,7 +61,5 @@ namespace Assets.Shared.Scripts
             loadingText.text = "Loading" + new string('.', numDots);
         }
 
-       
-
     }
 }

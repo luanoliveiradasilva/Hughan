@@ -9,6 +9,8 @@ TagManager:
   - Terrain
   - Cursor
   - Menu
+  - PlayerHughan
+  - CajadoHughan
   layers:
   - Default
   - TransparentFX

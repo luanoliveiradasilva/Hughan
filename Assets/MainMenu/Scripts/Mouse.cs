@@ -13,7 +13,6 @@ public class Mouse : MonoBehaviour
 
     private static LoadGamesScenes _loadGamesScenes;
 
-
     private void Start()
     {
       startButton.onClick.AddListener(_loadGamesScenes.loadScene);
@@ -21,22 +20,16 @@ public class Mouse : MonoBehaviour
 
     private void Update()
     {
-        // Obter a entrada do teclado nos eixos horizontal e vertical
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
         
-
-        // Calcular a direção do movimento
         Vector3 movement = new Vector3(moveHorizontal, moveVertical, 0f);
         movement = movement.normalized;
 
-        // Calcular a posição atual do triângulo
         Vector3 currentPosition = transform.position;
 
-        // Calcular a nova posição do triângulo com base na velocidade e no tempo
         Vector3 newPosition = currentPosition + movement * cursorSpeed * Time.deltaTime;
 
-        // Atualizar a posição do triângulo
         transform.position = newPosition;
     }
 
