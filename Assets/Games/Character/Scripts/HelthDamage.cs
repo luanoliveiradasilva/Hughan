@@ -55,7 +55,7 @@ namespace Assets.Games.Character.Scripts
         }
 
         private void UpdateHealthBar()
-        {
+        {                                   
             float healthRatio = (float)currentHealth / maxHealth;
             healthBarImage.fillAmount = healthRatio;
         }
