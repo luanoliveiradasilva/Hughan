@@ -14,10 +14,25 @@ namespace Assets.Shared.Scripts
         [SerializeField] GameObject closeCurrentScreen;
 
         [SerializeField] private TMP_Text loadingText;
-
+        [SerializeField] private AudioSource loadingSong;
+        [SerializeField] private AudioClip loadingAudioClip;
         private float loadingTime = 5f;
         private int numDots = 0;
 
+
+        private void Awake()
+        {
+            loadingSong = GetComponent<AudioSource>();
+            loadingAudioClip = GetComponent<AudioClip>();
+        }
+
+        private void Start()
+        {
+            loadingSong.clip = loadingAudioClip;
+            loadingSong.Play();
+
+
+        }
         private void Update()
         {
             transform.position += Vector3.forward * 1 * Time.unscaledDeltaTime;
@@ -46,9 +61,7 @@ namespace Assets.Shared.Scripts
             loadingText.text = "Loading" + new string('.', numDots);
         }
 
-        public void DesabilityTimeScale()
-        {
-            transform.position += Vector3.forward * 1 * Time.unscaledDeltaTime;
-        }
+       
+
     }
 }
