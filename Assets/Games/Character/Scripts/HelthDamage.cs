@@ -79,7 +79,7 @@ namespace Assets.Games.Character.Scripts
 
             Vector3 initialCenter = characterController.center;
             Vector3 targetCenter = initialCenter;
-            targetCenter.y += 1.1f; // Ajuste o valor conforme necessário
+            targetCenter.y += 2.1f; // Ajuste o valor conforme necessário
 
             float elapsedTime = 0f;
 
@@ -100,7 +100,7 @@ namespace Assets.Games.Character.Scripts
 
             if (collision.gameObject.CompareTag("Enemy"))
             {
-                int damage = 0;
+                int damage = 100;
                 TakeDamage(damage);
             }
         }
