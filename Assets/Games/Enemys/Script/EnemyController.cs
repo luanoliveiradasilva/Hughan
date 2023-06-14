@@ -1,4 +1,5 @@
 using UnityEngine.UI;
+using System.Collections;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
@@ -14,9 +15,18 @@ public class EnemyController : MonoBehaviour
     [Tooltip("Reference to the life bar image")]
     [SerializeField] private Image healthBarImage;
 
+    private Animator animator;
+
+    private int _animationEnemy = Animator.StringToHash("DeathEnemy");
+
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
+
     void Start()
     {
-        currentHealth = maxHealth;
+        currentHealth = maxHealth;        
     }
 
     public void TakeDamage(int damage)
@@ -25,16 +35,34 @@ public class EnemyController : MonoBehaviour
 
         // Garante que a vida nunca seja menor que zero
         currentHealth = Mathf.Max(0, currentHealth);
+
         float healthRatio = (float)currentHealth / maxHealth;
         healthBarImage.fillAmount = healthRatio;
+
+        if (currentHealth <= 0f)
+        {
+            Die();
+            StartCoroutine(WaitANimationEnemyDeath());
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("CajadoHughan"))
         {
-            int damage = 10;
+            int damage = 50;
             TakeDamage(damage);
         }
+    }
+
+    private void Die()
+    {
+        animator.SetBool(_animationEnemy, true);
+    }
+
+    private IEnumerator WaitANimationEnemyDeath()
+    {
+        yield return new WaitForSeconds(2);
+        gameObject.SetActive(false);
     }
 }

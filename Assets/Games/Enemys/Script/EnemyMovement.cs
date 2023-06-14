@@ -3,7 +3,7 @@ using UnityEngine;
 public class EnemyMovement : MonoBehaviour
 {
     private Transform target; // Reference to the target (player) transform
-    public float movementSpeed = 5f; // Speed at which the enemy moves
+    public float movementSpeed = 2f; // Speed at which the enemy moves
 
     private void Start()
     {
@@ -25,6 +25,15 @@ public class EnemyMovement : MonoBehaviour
 
             // Move the enemy towards the target
             transform.Translate(direction * movementSpeed * Time.deltaTime);
+
+            direction.y = 0f;
+
+            if (direction != Vector3.zero)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(direction);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * 200f);
+            }
+
         }
         else
         {

@@ -18,6 +18,11 @@ public class SettingGame : MonoBehaviour
 
     [SerializeField] Button _back;
 
+    private void Start()
+    {
+        Time.timeScale = 1f;
+    }
+
     public void SettingsOfGame()
     {
         closeCurrentScreen.gameObject.SetActive(false);

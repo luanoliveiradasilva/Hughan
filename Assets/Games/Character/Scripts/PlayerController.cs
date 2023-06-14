@@ -58,7 +58,6 @@ namespace Assets.Unity___Foundations_of_Audio.Scripts.System
             _characterController = GetComponent<CharacterController>();
             _animator = GetComponent<Animator>();
             _rigidbody = GetComponent<Rigidbody>();
-
         }
 
         private void Start()
@@ -75,6 +74,7 @@ namespace Assets.Unity___Foundations_of_Audio.Scripts.System
         {
             MoveCameraRotation();
         }
+
         private void MovePlayer()
         {
             float moveVertical = Input.GetAxis("Vertical");
