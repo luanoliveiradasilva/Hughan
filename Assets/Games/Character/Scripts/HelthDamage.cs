@@ -95,11 +95,12 @@ namespace Assets.Games.Character.Scripts
             characterController.center = targetCenter;
         }
 
-        private void OnTriggerEnter(Collider other)
+        private void OnCollisionEnter(Collision collision)
         {
-            if (other.CompareTag("Enemy"))
+
+            if (collision.gameObject.CompareTag("Enemy"))
             {
-                int damage = 50;
+                int damage = 10;
                 TakeDamage(damage);
             }
         }
