@@ -45,7 +45,6 @@ namespace Assets.Games.Character.Scripts
 
             // Atualiza a barra de vida
             UpdateHealthBar();
-
             if (currentHealth == 0 && !deathPlayer)
             {
 
@@ -55,13 +54,13 @@ namespace Assets.Games.Character.Scripts
         }
 
         private void UpdateHealthBar()
-        {                                   
+        {
             float healthRatio = (float)currentHealth / maxHealth;
             healthBarImage.fillAmount = healthRatio;
         }
 
         private void Die()
-        {     
+        {
             animator.SetBool(_animationPlayerDeath, true);
             StartCoroutine(IncreaseCenterY(3.8f));
         }
@@ -97,10 +96,9 @@ namespace Assets.Games.Character.Scripts
 
         private void OnCollisionEnter(Collision collision)
         {
-
             if (collision.gameObject.CompareTag("Enemy"))
             {
-                int damage = 0;
+                int damage = 5;
                 TakeDamage(damage);
             }
         }
