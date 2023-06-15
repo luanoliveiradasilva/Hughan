@@ -100,7 +100,7 @@ namespace Assets.Games.Character.Scripts
 
             if (collision.gameObject.CompareTag("Enemy"))
             {
-                int damage = 100;
+                int damage = 0;
                 TakeDamage(damage);
             }
         }
