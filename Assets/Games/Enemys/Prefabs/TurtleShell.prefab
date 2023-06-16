@@ -1039,7 +1039,7 @@ GameObject:
   - component: {fileID: 1527323646}
   - component: {fileID: 1527323645}
   - component: {fileID: 5977579293379138882}
-  - component: {fileID: 1527323653}
+  - component: {fileID: 1527323648}
   m_Layer: 0
   m_Name: TurtleShell
   m_TagString: Enemy
@@ -1100,7 +1100,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 116
   m_CollisionDetection: 0
 --- !u!114 &1527323645
 MonoBehaviour:
@@ -1130,8 +1130,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 2
---- !u!135 &1527323653
-SphereCollider:
+--- !u!136 &1527323648
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1140,9 +1140,10 @@ SphereCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.69
-  m_Center: {x: -0.12, y: 0.28, z: -0.08}
+  m_Radius: 0.67
+  m_Height: 3.48
+  m_Direction: 1
+  m_Center: {x: -0, y: 1.39, z: 0}
 --- !u!1 &1914324128724412
 GameObject:
   m_ObjectHideFlags: 0
@@ -1199,7 +1200,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1923079511184120}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -203.829, y: -7.14, z: 0}
+  m_LocalPosition: {x: -203.829, y: -7.571, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

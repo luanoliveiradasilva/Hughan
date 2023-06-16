@@ -157,7 +157,7 @@ namespace Assets.Unity___Foundations_of_Audio.Scripts.System
         private IEnumerator Attacks()
         {
             _CurrentClipInfo = this._animator.GetCurrentAnimatorClipInfo(0);
-
+    
             _animator.SetBool(_animationPlayerAttackHas, true);
             yield return new WaitForSeconds(_CurrentClipInfo[0].clip.length);
             _animator.SetBool(_animationPlayerAttackHas, false);       
