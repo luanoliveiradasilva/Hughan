@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class SettingGame : MonoBehaviour
 {
 
@@ -34,4 +35,5 @@ public class SettingGame : MonoBehaviour
         _closeSettingsScreen.gameObject.SetActive(false);
         _openMainMenuScreen.SetActive(true);
     }
+
 }

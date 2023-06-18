@@ -20,9 +20,6 @@ public class GameOverController : MonoBehaviour
 
     private IEnumerator RestartCoroutine()
     {
-        _gameOver.SetActive(false);
-        
-        Time.timeScale = 1f;
 
         loadingScreen.SetActive(true);
 
