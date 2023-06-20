@@ -29,13 +29,14 @@ namespace Assets.Unity___Foundations_of_Audio.Scripts.System
         private int _animationPlayerJumpHash = Animator.StringToHash("Jump");
         private int _animationPlayerAttackHas = Animator.StringToHash("Attack");
 
-        private CharacterController characterController;
-        private Animator animator;
+        private CharacterController _characterController;
+        private Animator _animator;
         private Vector3 playerCharacterMove;
         private Vector3 moveCamera;
         private GameObject _mainCamera;
         private Rigidbody _rigidbody;
         private AnimatorClipInfo[] _CurrentClipInfo;
+        [SerializeField] private GameObject helthBar;
 
         private float _targetRotation = 0.0f;
         private float _rotationVelocity;
@@ -53,13 +54,15 @@ namespace Assets.Unity___Foundations_of_Audio.Scripts.System
             {
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
             }
+
+            _characterController = GetComponent<CharacterController>();
+            _animator = GetComponent<Animator>();
+            _rigidbody = GetComponent<Rigidbody>();
         }
 
         private void Start()
         {
-            characterController = GetComponent<CharacterController>();
-            animator = GetComponent<Animator>();
-            _rigidbody = GetComponent<Rigidbody>();
+            helthBar.SetActive(true);
         }
 
         private void Update()
@@ -71,6 +74,7 @@ namespace Assets.Unity___Foundations_of_Audio.Scripts.System
         {
             MoveCameraRotation();
         }
+
         private void MovePlayer()
         {
             float moveVertical = Input.GetAxis("Vertical");
@@ -87,7 +91,7 @@ namespace Assets.Unity___Foundations_of_Audio.Scripts.System
 
                 float moveSpeedMultiplier = (Mathf.Abs(moveVertical) > 0.0f) ? 1.0f : 3.0f;
 
-                animator.SetFloat(_animationPlayerHash, playerCharacterMove.sqrMagnitude + moveSpeedMultiplier);
+                _animator.SetFloat(_animationPlayerHash, playerCharacterMove.sqrMagnitude + moveSpeedMultiplier);
                 _rigidbody.velocity = transform.forward * moveSpeedPlayer * moveSpeedMultiplier;
 
                 if (jumpPlayer > 0 || jumpKeyboard == true)
@@ -103,14 +107,14 @@ namespace Assets.Unity___Foundations_of_Audio.Scripts.System
                 float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity, RotationSmoothTime);
                 transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
 
-                Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
+                Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;                
 
-                characterController.Move(targetDirection.normalized * (moveSpeedPlayer * Time.deltaTime) +
+                _characterController.Move(targetDirection.normalized * (moveSpeedPlayer * Time.deltaTime) +
                              new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
             }
             else
             {
-                animator.SetFloat(_animationPlayerHash, 0);
+                _animator.SetFloat(_animationPlayerHash, 0);
 
                 if (jumpPlayer > 0 || jumpKeyboard == true)
                     StartCoroutine(Jump());
@@ -152,20 +156,21 @@ namespace Assets.Unity___Foundations_of_Audio.Scripts.System
 
         private IEnumerator Attacks()
         {
-            _CurrentClipInfo = this.animator.GetCurrentAnimatorClipInfo(0);
-
-            animator.SetBool(_animationPlayerAttackHas, true);
+            _CurrentClipInfo = this._animator.GetCurrentAnimatorClipInfo(0);
+    
+            _animator.SetBool(_animationPlayerAttackHas, true);
             yield return new WaitForSeconds(_CurrentClipInfo[0].clip.length);
-            animator.SetBool(_animationPlayerAttackHas, false);
+            _animator.SetBool(_animationPlayerAttackHas, false);       
+
         }
 
         private IEnumerator Jump()
         {
-            _CurrentClipInfo = this.animator.GetCurrentAnimatorClipInfo(0);
+            _CurrentClipInfo = this._animator.GetCurrentAnimatorClipInfo(0);
 
-            animator.SetBool(_animationPlayerJumpHash, true);
+            _animator.SetBool(_animationPlayerJumpHash, true);
             yield return new WaitForSeconds(_CurrentClipInfo[0].clip.length);
-            animator.SetBool(_animationPlayerJumpHash, false);
+            _animator.SetBool(_animationPlayerJumpHash, false);
         }
 
     }

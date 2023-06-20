@@ -7,6 +7,10 @@ TagManager:
   - CinemachineTarget
   - Enemy
   - Terrain
+  - Cursor
+  - Menu
+  - PlayerHughan
+  - CajadoHughan
   layers:
   - Default
   - TransparentFX

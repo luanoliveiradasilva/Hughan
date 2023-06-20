@@ -8,30 +8,32 @@ namespace Assets.Games.Character.Scripts
     {
         [Header("Helth")]
         [Tooltip("Maximum living condition")]
-        public int maxHealth = 100;
+        [SerializeField] private int maxHealth = 100;
         [Tooltip("Current health condition")]
-        public int currentHealth;
+        [SerializeField] private int currentHealth;
 
         // Referência para a imagem da barra de vida
         [Header("Helthbar")]
         [Tooltip("Reference to the life bar image")]
-        public Image healthBarImage;
-
-        private Animator animator;
-        public Vector3 respawnPosition;
-        private CharacterController characterController;
+        [SerializeField] private Image healthBarImage;
 
         private int _animationPlayerDeath = Animator.StringToHash("Death");
 
-        private bool deathPlayer = false;
+        private Animator animator;
+        private CharacterController characterController;
+        [SerializeField] private GameObject _gameOver;
 
+        private bool deathPlayer = false;        
+
+        private void Awake()
+        {
+            animator = GetComponent<Animator>();
+            characterController = GetComponent<CharacterController>();
+        }
 
         private void Start()
         {
             currentHealth = maxHealth;
-            animator = GetComponent<Animator>();
-            characterController = GetComponent<CharacterController>();
-            respawnPosition = transform.position;
         }
 
         public void TakeDamage(int damage)
@@ -43,12 +45,11 @@ namespace Assets.Games.Character.Scripts
 
             // Atualiza a barra de vida
             UpdateHealthBar();
-
             if (currentHealth == 0 && !deathPlayer)
             {
 
                 Die();
-
+               StartCoroutine(waitForDeath());
             }
         }
 
@@ -59,18 +60,25 @@ namespace Assets.Games.Character.Scripts
         }
 
         private void Die()
-        {     
-            
+        {
             animator.SetBool(_animationPlayerDeath, true);
-            StartCoroutine(IncreaseCenterYOverTime(3.8f));       
+            StartCoroutine(IncreaseCenterY(3.8f));
         }
 
-        private IEnumerator IncreaseCenterYOverTime(float duration)
+        private IEnumerator waitForDeath()
+        {
+            yield return new WaitForSeconds(3);
+            Time.timeScale = 0f;
+            _gameOver.SetActive(true);
+        }
+
+        //Calcula do collider padrao do character controller diminui o position center Y
+        private IEnumerator IncreaseCenterY(float duration)
         {
 
             Vector3 initialCenter = characterController.center;
             Vector3 targetCenter = initialCenter;
-            targetCenter.y += 1.1f; // Ajuste o valor conforme necessário
+            targetCenter.y += 2.1f; // Ajuste o valor conforme necessário
 
             float elapsedTime = 0f;
 
@@ -86,11 +94,11 @@ namespace Assets.Games.Character.Scripts
             characterController.center = targetCenter;
         }
 
-        private void OnTriggerEnter(Collider other)
+        private void OnCollisionEnter(Collision collision)
         {
-            if (other.CompareTag("Enemy"))
+            if (collision.gameObject.CompareTag("Enemy"))
             {
-                int damage = 50;
+                int damage = 5;
                 TakeDamage(damage);
             }
         }

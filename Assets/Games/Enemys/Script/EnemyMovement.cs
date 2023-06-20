@@ -1,0 +1,54 @@
+using UnityEngine;
+
+public class EnemyMovement : MonoBehaviour
+{
+    private Transform target; // Reference to the target (player) transform
+    [SerializeField] private float movementSpeed = 2f; // Speed at which the enemy moves
+
+    private void Start()
+    {
+        FindTarget(); // Call FindTarget when the enemy starts to set the initial target
+    }
+
+    public void SetTarget(Transform newTarget)
+    {
+        target = newTarget;
+    }
+
+    private void Update()
+    {
+        if (target != null)
+        {
+            // Calculate the direction from the enemy to the target
+            Vector3 direction = target.position - transform.position;
+            direction.Normalize();
+
+            transform.position += direction * movementSpeed * Time.deltaTime;
+            // Move the enemy towards the target
+           // transform.Translate(direction * movementSpeed * Time.deltaTime);
+
+            direction.y = 0f;
+
+            if (direction != Vector3.zero)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(direction);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
+            }
+
+        }
+        else
+        {
+            FindTarget(); // Call FindTarget to restore the target reference
+        }
+    }
+
+    private void FindTarget()
+    {
+        // Find the player or set a new target based on your game logic
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            SetTarget(player.transform);
+        }
+    }
+}
